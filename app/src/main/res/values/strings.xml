@@ -1,0 +1,8 @@
+<resources>
+    <string name="empty"></string>
+    <string name="app_name">Acronyms</string>
+    <string name="error_entry_empty">This field cannot be empty</string>
+    <string name="search">Search</string>
+    <string name="entry_placeholder">Acronym</string>
+    <string name="not_found_placeholder">we found no results for this search</string>
+</resources>
