@@ -22,17 +22,16 @@ import org.mockito.MockitoAnnotations
 @RunWith(JUnit4::class)
 class GetAcronymsUseCaseTest {
 
-    private val testDispatcher = StandardTestDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Mock
     private lateinit var repository: AcronymRepository
 
-    @Mock
     private lateinit var getAcronymsUseCase: GetAcronymsUseCase
 
     @Before
     fun init() {
-        MockitoAnnotations.openMocks(this)
+        MockitoAnnotations.initMocks(this)
         getAcronymsUseCase = GetAcronymsUseCase(repository, testDispatcher)
     }
 
@@ -44,10 +43,40 @@ class GetAcronymsUseCaseTest {
 
         `when`(repository.getAcronyms(entry = "asap")).thenReturn(list)
 
-        val result = repository.getAcronyms("asap")
+        val result = getAcronymsUseCase(input = "asap")
 
-        Assert.assertEquals(list, result)
+        assert(result is Response.Success)
+
+        Assert.assertEquals(list, (result as Response.Success).response)
     }
+
+    @Test
+    fun getEmptyList() = runTest {
+        val list = emptyList<AcronymEntity>()
+
+        `when`(repository.getAcronyms(entry = "asap")).thenReturn(list)
+
+        val result = getAcronymsUseCase(input = "asap")
+
+        assert(result is Response.Success)
+
+        Assert.assertEquals(list, (result as Response.Success).response)
+
+    }
+
+    @Test
+    fun getFailure() = runTest {
+
+        `when`(repository.getAcronyms(entry = "asap")).thenThrow(RuntimeException())
+
+        val result = getAcronymsUseCase(input = "asap")
+
+        assert(result is Response.Failure)
+
+        assert((result as Response.Failure).error is RuntimeException)
+
+    }
+
 
 
 }

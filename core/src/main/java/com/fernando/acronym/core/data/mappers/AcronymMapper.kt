@@ -25,3 +25,21 @@ internal fun LfDto.VarDto.toEntity() = LfEntity.VarEntity(
     freq = freq,
     since = since
 )
+
+internal fun AcronymEntity.toDto() = AcronymDto(
+    lfs = lfs.map { it.toDto() },
+    sf = sf,
+)
+
+internal fun LfEntity.toDto() = LfDto(
+    lf = lf,
+    freq = freq,
+    since = since,
+    vars = vars.map { it.toEntity() }
+)
+
+internal fun LfEntity.VarEntity.toEntity() = LfDto.VarDto(
+    lf = lf,
+    freq = freq,
+    since = since
+)
